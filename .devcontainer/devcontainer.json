@@ -1,0 +1,17 @@
+{
+       "name": "Personal SQL Guidebook",
+       "dockerComposeFile": "docker-compose.yml",
+       "service": "dev",
+       "workspaceFolder": "/workspaces",
+        "forwardPorts": [5432],
+       "postCreateCommand": "sudo apt-get update && sudo apt-get install -y sqlite3",
+       "customizations": {
+              "vscode": {
+                     "extensions": [
+                            "alexcvzz.vscode-sqlite",
+                            "qwtel.sqlite-viewer",
+                            "ms-azuretools.vscode-docker"
+                     ]
+              }
+       }
+}
