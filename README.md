@@ -6,8 +6,47 @@
 **Assignment:** Build Your Personal SQL Guidebook
 ---
 
-## Overview
+## Table of Contents
 
+- [Overview](#overview)
+- [Project Structure](#project-structure)
+- [Usage](#usage)
+- [Requirements](#requirements)
+- [Create database and Populate Tables](#create-database-and-populate-tables)
+- [Dataset Information](#dataset-information)
+- [Basic Queries](#basic-queries)
+  - [COUNT](#countthe-number-of-rows-use-as-is-used-to-rename-columns)
+  - [DISTINCT](#find-the-unique-rows-in-a-column-using-distinct)
+  - [UPDATE](#update-rows-in-tables-and-include-where-clause-to-specify-the-condition)
+  - [DELETE](#delete-to-remove-specific-records-must-include-a-where-clause-this-often-involves-using-a-unique-identifier-like-the-primary-key)
+  - [SELECT / WHERE](#run-select--to-fetch-all-columns-fromt-the-students-tables-use-from-to-choose-the-table-and-where-to-filter-rows-based-on-a-condition)
+  - [ORDER BY](#use-order-by-to-sort-results-by-one-or-more-columns)
+  - [GROUP BY](#use-group-by-to-aggregate-rows-that-share-a-common-value)
+  - [LIMIT](#restrict-the-number-of-rows-returned-using-limit)
+  - [HAVING](#filter-results-after-aggregation-works-like-where-but-on-grouped-data-using-having)
+  - [Aggregate Functions (AVG, MAX, MIN, SUM)](#aggregate-functions-are-most-powerful-with-group-by)
+- [Combining Multiple Tables with Joins](#combining-multiple-tables-with-joins)
+  - [INNER JOIN](#inner-join-returns-rows-when-there-is-a-match-in-both-tables)
+  - [LEFT JOIN](#left-join-returns-all-rows-from-the-left-table-with-corresponding-rows-from-the-right-table-even-if-theres-no-match-in-the-right-table-nulls-are-returned-as-values-for-the-2nd-table)
+  - [RIGHT JOIN](#sqlite-does-not-support-right-join-directly-but-you-can-simulate-it-by-flipping-the-tables-in-a-left-join)
+  - [FULL OUTER JOIN](#full-outer-join-returns-all-rows-from-both-tables---if-theres-is-not-matching-row-in-the-second-table-nulls-are-returned)
+  - [CROSS JOIN](#cross-join-should-be-used-carefully-it-is-a-form-of-cartesian-product-where-every-row-from-table-a-is-combined-with-every-row-from-table-b)
+  - [Multiple Joins](#join-with-multiple-tables-you-can-chain-joins-to-connect-3-tables)
+- [Data Cleaning, Transformation, and Advanced Analytics](#data-cleaning-transformation-and-advanced-analytics)
+  - [CASE WHEN](#using-case-when-to-create-conditional-logic-inside-queries-similar-to-if-else)
+  - [COALESCE](#clean-up-missing-data-using-case-or-coalesce)
+  - [String Functions](#string-functions-help-with-cleaning-and-transforming-text-data)
+  - [Date Functions](#built-in-date-and-time-functions-date-strftime-etc-for-cleaning-and-analyzing-time-data)
+- [Window Functions](#window-functions-analytics-allow-calculations-across-rows-related-to-the-current-row-without-collapsing-thme-like-group-by-would)
+  - [RANK](#ranking-customers-by-credit-limit-within-each-country-using-rank-over)
+  - [Running Totals (SUM OVER)](#running-totals-with-sum-over)
+  - [LAG](#compare-row-to-previous-one-with-lag)
+- [Common Table Expressions (CTEs)](#common-table-expressions-ctes-using-with)
+  - [Simple CTE](#total-orders-per-customer-with-cte)
+  - [Recursive CTE](#recursive-cte-advanced)
+
+## Overview
+This SQL Guidebook provides practical examples of basic to advanced SQL concepts using the classicmodels sample database. It is designed as a reference for practice, with categorized scripts for quick lookup and screenshots of query results for better understanding.
 
 ## Project Structure 
 ```bash
