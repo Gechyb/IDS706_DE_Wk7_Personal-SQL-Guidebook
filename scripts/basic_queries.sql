@@ -9,12 +9,16 @@ SELECT name FROM sqlite_master WHERE type='table';
 -- to see the schema including tables and indices
 .schema
 
--- Checking the number of row I have before performing crude steps
-SELECT COUNT(*) as total
+-- Count how many row (or distinct values) are in a column
+SELECT COUNT(*) AS total
 FROM productlines;
 
+-- Count distinct countries where customers are located
+SELECT COUNT(DISTINCT country) AS unique_countries
+FROM customers;
+
 --  Fetch the first 10 rows of data from the table
-SELECT *
+SELECT customerName, country, creditLimit
 FROM customers
 LIMIT 10;
 
@@ -41,3 +45,21 @@ ORDER BY buyPrice DESC;
 SELECT country, COUNT(customerNumber) AS num_customers
 FROM customers
 GROUP BY country;
+
+-- Filter results after aggregation (works like WHERE but on grouped data):
+SELECT country, COUNT(customerNumber) AS num_customers
+FROM customers
+GROUP BY country
+HAVING num_customers > 2;
+
+-- Average credit limit of customers
+SELECT AVG(buyPrice) AS avg_product_price
+FROM products;
+
+-- Highest order amount paid
+SELECT MAX(amount) AS max_payment
+FROM payments;
+
+-- Smallest stock level across all products
+SELECT MIN(quantityInStock) AS min_stock
+FROM products;
