@@ -331,9 +331,195 @@ INNER JOIN customers c ON o.customerNumber = c.customerNumber
 INNER JOIN employees e ON c.salesRepEmployeeNumber = e.employeeNumber;
 
 ```
+*OR*
+
+```sql
+-- Customers with sales reps
+SELECT c.customerName, e.firstName, e.lastName
+FROM customers c
+LEFT JOIN employees e
+    ON c.salesRepEmployeeNumber = e.employeeNumber
+
+UNION
+
+-- Employees without customers
+SELECT c.customerName, e.firstName, e.lastName
+FROM employees e
+LEFT JOIN customers c
+    ON c.salesRepEmployeeNumber = e.employeeNumber;
+```
 
 ![alt text](images/multiplejoin.png)
 
 - List order numbers, customer names, and sales rep names.
 - With these joins, you’ll be able to handle multi-table queries in ClassicModels easily.
 
+## Data cleaning, transformation, and advanced analytics
+
+### *Using `CASE WHEN` to create conditional logic inside queries, similar to if-else*
+```sql
+SELECT 
+    customerName,
+    creditLimit,
+    CASE 
+        WHEN creditLimit >= 100000 THEN 'High Value'
+        WHEN creditLimit BETWEEN 50000 AND 99999 THEN 'Medium Value'
+        ELSE 'Low Value'
+    END AS customerCategory
+FROM customers
+ORDER BY creditLimit DESC;
+```
+![alt text](images/casewhen.png)
+
+- Categorize customer by credit limit
+- This helps create labels or buckets for analysis
+
+### *Clean up missing data using `CASE` or `COALESCE`*
+
+```sql
+SELECT 
+    customerName,
+    city,
+    COALESCE(state, 'Unknown') AS cleanedState,
+    country
+FROM customers
+LIMIT 10;
+
+```
+
+![alt text](images/coalesce.png)
+
+- Sometimes customers don't have a state value
+- Replace NULL with "Unknown" using `COALESCE`
+
+### *String functions help with cleaning and transforming text data*
+
+- `UPPER()` makes text uppercase.
+- `||` concatenates first and last names.
+- `SUBSTR()` extracts part of a string (here, first 5 characters of phone).
+
+```sql
+SELECT 
+    customerName,
+    UPPER(contactFirstName || ' ' || contactLastName) AS fullNameUpper,
+    SUBSTR(phone, 1, 5) AS phonePrefix
+FROM customers
+LIMIT 10;
+```
+![alt text](images/upper.png)
+
+- Extract and Format Customer Info
+- Useful for formatting reports, searching, or cleaning inconsistent text.
+
+### *Built in date and time functions (DATE(), strftime(), etc.) for cleaning and analyzing time data.*
+
+- `strftime('%Y', orderDate)` → gives the year.
+- `strftime('%m', orderDate)` → gives the month.
+
+```sql
+SELECT 
+    orderNumber,
+    orderDate,
+    strftime('%Y', orderDate) AS orderYear,
+    strftime('%m', orderDate) AS orderMonth
+FROM orders
+LIMIT 10;
+```
+![alt text](images/string_data.png)
+- Extract Year and Month from Order Date
+- Lets you group sales by year/month, or filter by date ranges more flexibly.
+
+### *Window functions (analytics) allow calculations across rows related to the current row without collapsing thme like `GROUP BY` would.*
+
+*Ranking customers by credit limit within each country using `RANK OVER`*
+```sql
+SELECT 
+    country,
+    customerName,
+    creditLimit,
+    RANK() OVER (PARTITION BY country ORDER BY creditLimit DESC) AS creditRank
+FROM customers;
+```
+![alt text](images/rank.png)
+
+- Each customer gets a rank within their country.
+
+*Running totals with `SUM OVER`*
+```sql
+SELECT 
+    customerNumber,
+    paymentDate,
+    amount,
+    SUM(amount) OVER (PARTITION BY customerNumber ORDER BY paymentDate) AS runningTotal
+FROM payments
+WHERE customerNumber = 124;
+```
+![alt text](images/runningtotal.png)
+
+-  This gives a cumulative payment history per customer.
+
+*Compare row to previous one with `LAG`*
+```sql
+SELECT 
+    customerNumber,
+    paymentDate,
+    amount,
+    LAG(amount, 1) OVER (PARTITION BY customerNumber ORDER BY paymentDate) AS prevPayment,
+    amount - LAG(amount, 1) OVER (PARTITION BY customerNumber ORDER BY paymentDate) AS diffFromPrev
+FROM payments
+WHERE customerNumber = 124;
+```
+![alt text](images/lag.png)
+
+- Shows how much a customer’s payment changed from their previous payment.
+
+
+### *Common Table Expressions (CTEs) using `WITH`*
+CTEs are very useful when you want to simplify complex queries by breaking them into readable, reusable blocks. Think of them as temporary result sets you can reference within your main query.
+
+*Total Orders Per Customer with CTE*
+```sql
+WITH customer_orders AS (
+    SELECT 
+        c.customerNumber,
+        c.customerName,
+        COUNT(o.orderNumber) AS totalOrders
+    FROM customers c
+    JOIN orders o 
+        ON c.customerNumber = o.customerNumber
+    GROUP BY c.customerNumber
+)
+SELECT * 
+FROM customer_orders
+ORDER BY totalOrders DESC
+LIMIT 10;
+```
+![alt text](images/cte.png)
+
+- The CTE (customer_orders) calculates number of orders per customer.
+- The main query just selects from it and orders the results.
+- Much cleaner than writing a big nested query.
+
+
+*Recursive CTE (Advanced)*
+```sql
+WITH RECURSIVE employee_hierarchy AS (
+    SELECT employeeNumber, firstName, lastName, reportsTo AS manager
+    FROM employees
+    WHERE reportsTo IS NULL  -- Start with top-level (President)
+
+    UNION ALL
+
+    SELECT e.employeeNumber, e.firstName, e.lastName, e.reportsTo
+    FROM employees e
+    INNER JOIN employee_hierarchy eh 
+        ON e.reportsTo = eh.employeeNumber
+)
+SELECT * 
+FROM employee_hierarchy;
+```
+
+![alt text](images/recursive_cte.png)
+
+- useful for hierarchical data (like employee → manager).
+- This will walk down the employee reporting chain starting from the President.

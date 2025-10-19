@@ -29,6 +29,21 @@ SELECT c.customerName, o.city
 FROM customers c
 CROSS JOIN offices o;
 
+-- join using union 
+-- Customers with sales reps
+SELECT c.customerName, e.firstName, e.lastName
+FROM customers c
+LEFT JOIN employees e
+    ON c.salesRepEmployeeNumber = e.employeeNumber
+
+UNION
+
+-- Employees without customers
+SELECT c.customerName, e.firstName, e.lastName
+FROM employees e
+LEFT JOIN customers c
+    ON c.salesRepEmployeeNumber = e.employeeNumber;
+
 -- join with multiple tables
 SELECT o.orderNumber, c.customerName, e.firstName || ' ' || e.lastName AS salesRep
 FROM orders o
