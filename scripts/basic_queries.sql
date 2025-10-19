@@ -63,3 +63,23 @@ FROM payments;
 -- Smallest stock level across all products
 SELECT MIN(quantityInStock) AS min_stock
 FROM products;
+
+-- Total payments received
+SELECT SUM(amount) AS total_payments
+FROM payments;
+
+-- Total stock across all products
+SELECT SUM(quantityInStock) AS total_stock
+FROM products;
+
+-- Number of customers per country
+SELECT country, COUNT(customerNumber) AS num_customers
+FROM customers
+GROUP BY country
+ORDER BY num_customers DESC;
+
+-- Average payment per customer
+SELECT customerNumber, AVG(amount) AS avg_payment
+FROM payments
+GROUP BY customerNumber
+ORDER BY avg_payment DESC;
