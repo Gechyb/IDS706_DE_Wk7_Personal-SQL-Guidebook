@@ -71,34 +71,36 @@ DROP TABLE IF EXISTS
 *To create tables in the database run the `CREATE TABLE` command* and to `INSERT INTO` populate the tables with row information.
 
 ```sql
-CREATE TABLE departments (
-    dept_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    dept_name TEXT
+CREATE TABLE instructors (
+    instructor_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    first_name TEXT,
+    last_name TEXT,
+    dept_id INTEGER,
+    FOREIGN KEY(dept_id) REFERENCES departments(dept_id)
 );
 
-INSERT INTO departments (dept_name) VALUES
-('Mathematics'),
-('Computer Science'),
-('Physics'),
-('Chemistry'),
-('Biology'),
-('Engineering'),
-('Data Science'),
-('Statistics'),
-('Economics');
+INSERT INTO instructors (first_name, last_name, dept_id) VALUES
+('John', 'Smith', 2),
+('Alice', 'Johnson', 1),
+('Robert', 'Patel', 4),
+('Emily', 'Adams', 2),
+('Michael', 'Nguyen', 3);
 ```
- 
-*`UPDATE` rows in tables and include `WHERE` clause to specify the condition*
+
+![alt text](images/create_table.png)
+
+*`UPDATE` rows in tables and include `WHERE` clause to specify the condition.*
 
 ```sql
-
 UPDATE students
 SET major = 'Mathematics'
 WHERE first_name = 'Alan' AND last_name = 'Turing';
 
 SELECT * FROM students WHERE last_name = 'Turing';
-
 ```
+
+![alt text](images/update_students.png)
+
 ## Dataset Information
 The student record data is found in the `data` folder. This is a sample data (not an actual data) to help you practice sql queries quickly and effectively.
 
@@ -120,3 +122,17 @@ This is the list of tables found in student record database.
 - `students` — basic student info
 
 ## Running basic queries
+
+*`COUNT`the number of rows in instructors tables*
+```sql
+SELECT COUNT(*) AS total_instructors
+FROM instructors;
+```
+![alt text](images/instructors_total.png)
+
+*Run `SELECT` * to fetch all columns fromt the students tables. Use `FROM` to choose the table and `WHERE` to filter output.*
+
+```sql
+
+```
+
