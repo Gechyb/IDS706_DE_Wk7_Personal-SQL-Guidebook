@@ -17,7 +17,7 @@
 │   └── docker-compose.yml
 ├── README.md
 ├── data
-│   └── student_records.db
+│   └── classicmodels.db
 └── scripts
     └── basic_queries.sql
     └── create_table.sql
@@ -50,89 +50,128 @@ environment. When prompted, select “Reopen in Container.”
 
 ## Create database and Populate Tables
 
-The `student_records.db` database is created with multiple related tables so it mimics a nice, realistic dataset to experiment with.
+The `classicmodels.db` database is a retailer of scale models of classic cars. It contains typical business data, including information about customers, products, sales orders, sales order line items, and more. This is data set is found here [classicmodels.db](https://www.mysqltutorial.org/getting-started-with-mysql/mysql-sample-database/#:~:text=the%20following%20link%3A-,Download%20MySQL%20Sample%20Database,-The%20download%20file).
 
 *This is run on the terminal to create the database*
 
 ```bash
-sqlite3 student_records.db
+sqlite3 classicmodels.db
 ```
 
 *If you already created the table and want to update it, use the `DROP TABLE IF EXISTS` command to avoid errors.*
 
 ```sql
-DROP TABLE IF EXISTS students;
-DROP TABLE IF EXISTS courses;
-DROP TABLE IF EXISTS enrollments;
-DROP TABLE IF EXISTS grades;
-DROP TABLE IF EXISTS 
+DROP TABLE IF EXISTS productlines;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS offices;
+DROP TABLE IF EXISTS employees;
+DROP TABLE IF EXISTS customers; 
+DROP TABLE IF EXISTS payments;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS orderdetails;
 ```
 
 *To create tables in the database run the `CREATE TABLE` command* and to `INSERT INTO` populate the tables with row information.
 
 ```sql
-CREATE TABLE instructors (
-    instructor_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    first_name TEXT,
-    last_name TEXT,
-    dept_id INTEGER,
-    FOREIGN KEY(dept_id) REFERENCES departments(dept_id)
+CREATE TABLE offices (
+  officeCode TEXT PRIMARY KEY,
+  city TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  addressLine1 TEXT NOT NULL,
+  addressLine2 TEXT,
+  state TEXT,
+  country TEXT NOT NULL,
+  postalCode TEXT NOT NULL,
+  territory TEXT NOT NULL
 );
 
-INSERT INTO instructors (first_name, last_name, dept_id) VALUES
-('John', 'Smith', 2),
-('Alice', 'Johnson', 1),
-('Robert', 'Patel', 4),
-('Emily', 'Adams', 2),
-('Michael', 'Nguyen', 3);
+INSERT INTO offices (
+  officeCode, city, phone, addressLine1, addressLine2, state, country, postalCode, territory
+) VALUES
+('1','San Francisco','+1 650 219 4782','100 Market Street','Suite 300','CA','USA','94080','NA'),
+('2','Boston','+1 215 837 0825','1550 Court Place','Suite 102','MA','USA','02107','NA'),
+('3','NYC','+1 212 555 3000','523 East 53rd Street','apt. 5A','NY','USA','10022','NA'),
+('4','Paris','+33 14 723 4404','43 Rue Jouffroy D''abbans',NULL,NULL,'France','75017','EMEA'),
+('5','Tokyo','+81 33 224 5000','4-1 Kioicho',NULL,'Chiyoda-Ku','Japan','102-8578','Japan'),
+('6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor #2',NULL,'Australia','NSW 2010','APAC'),
+('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7',NULL,'UK','EC2N 1HN','EMEA');
 ```
 
 ![alt text](images/create_table.png)
 
-*`UPDATE` rows in tables and include `WHERE` clause to specify the condition.*
-
-```sql
-UPDATE students
-SET major = 'Mathematics'
-WHERE first_name = 'Alan' AND last_name = 'Turing';
-
-SELECT * FROM students WHERE last_name = 'Turing';
-```
-
-![alt text](images/update_students.png)
-
 ## Dataset Information
 The student record data is found in the `data` folder. This is a sample data (not an actual data) to help you practice sql queries quickly and effectively.
+
+This is the list of tables found in student record database.
+- `customers`: stores customer’s data.
+- `products`: stores a list of scale model cars.
+- `productlines`: stores a list of product lines.
+- `orders`: stores sales orders placed by customers.
+- `orderdetails`: stores sales order line items for every sales order.
+- `payments`: stores payments made by customers based on their accounts.
+- `employees`: stores employee information and the organization structure such as who reports to whom.
+- `offices`: stores sales office data.
 
 *Before you start running sql queries you can run this `.tables` to get the list of tables in the databse and `.schema` to get the metadata about the database schema.*
 
 ```sql
--- to get a list of all table names
 .tables
+```
+![alt text](images/table.png)
 
+```
 -- to see the schema including tables and indices
 .schema
 ```
-This is the list of tables found in student record database.
-- `courses` — course catalog
-- `departments` — college departments
-- `enrollments` - links students ↔ courses
-- `grades` — stores grades per enrollment     
-- `instructors` — course instructors information
-- `students` — basic student info
+![alt text](images/scheme.png)
 
 ## Running basic queries
 
-*`COUNT`the number of rows in instructors tables*
+*`COUNT`the number of rows. Use `AS` is used to rename columns*
 ```sql
-SELECT COUNT(*) AS total_instructors
-FROM instructors;
+SELECT COUNT(*) as total
+FROM productlines;
 ```
-![alt text](images/instructors_total.png)
+![alt text](images/totals.png)
 
-*Run `SELECT` * to fetch all columns fromt the students tables. Use `FROM` to choose the table and `WHERE` to filter output.*
+
+*`UPDATE` rows in tables and include `WHERE` clause to specify the condition.*
 
 ```sql
-
+UPDATE employees
+SET jobTitle = 'Senior Sales Rep'
+WHERE firstName = 'Leslie' AND lastName = 'Thompson';
 ```
+*Run `SELECT` * to fetch all columns fromt the students tables. Use `FROM` to choose the table and `WHERE` to filter rows based on a condition.*
 
+```sql
+SELECT * 
+FROM employees
+WHERE lastName = 'Thompson' AND firstName = 'Leslie';
+```
+![alt text](images/update.png)
+
+```sql
+SELECT customerName, country, creditLimit
+FROM customers
+WHERE country = 'USA' AND creditLimit > 50000;
+```
+![alt text](images/select.png)
+
+*Use `ORDER BY` to sort results by one or more columns*
+```sql
+SELECT productName, buyPrice, quantityInStock
+FROM products
+ORDER BY buyPrice DESC;
+```
+![alt text](images/orderby.png)
+
+*Use `GROUP BY` to aggregate rows that share a common value
+
+```sql
+SELECT country, COUNT(customerNumber) AS num_customers
+FROM customers
+GROUP BY country;
+```
+![alt text](images/groupby.png)
