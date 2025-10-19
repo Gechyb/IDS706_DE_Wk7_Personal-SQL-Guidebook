@@ -52,13 +52,13 @@ environment. When prompted, select “Reopen in Container.”
 
 The `classicmodels.db` database is a retailer of scale models of classic cars. It contains typical business data, including information about customers, products, sales orders, sales order line items, and more. This is data set is found here [classicmodels.db](https://www.mysqltutorial.org/getting-started-with-mysql/mysql-sample-database/#:~:text=the%20following%20link%3A-,Download%20MySQL%20Sample%20Database,-The%20download%20file).
 
-*This is run on the terminal to create the database*
+###  *This is run on the terminal to create the database*
 
 ```bash
 sqlite3 classicmodels.db
 ```
 
-*If you already created the table and want to update it, use the `DROP TABLE IF EXISTS` command to avoid errors.*
+### *If you already created the table and want to update it, use the `DROP TABLE IF EXISTS` command to avoid errors.*
 
 ```sql
 DROP TABLE IF EXISTS productlines;
@@ -71,7 +71,7 @@ DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS orderdetails;
 ```
 
-*To create tables in the database run the `CREATE TABLE` command* and to `INSERT INTO` populate the tables with row information.
+### *To create tables in the database run the `CREATE TABLE` command* and to `INSERT INTO` populate the tables with row information.
 
 ```sql
 CREATE TABLE offices (
@@ -113,7 +113,7 @@ This is the list of tables found in student record database.
 - `employees`: stores employee information and the organization structure such as who reports to whom.
 - `offices`: stores sales office data.
 
-*Before you start running sql queries you can run this `.tables` to get the list of tables in the databse and `.schema` to get the metadata about the database schema.*
+### *Before you start running sql queries you can run this `.tables` to get the list of tables in the databse and `.schema` to get the metadata about the database schema.*
 
 ```sql
 .tables
@@ -128,7 +128,7 @@ This is the list of tables found in student record database.
 
 ## Running basic queries
 
-*`COUNT`the number of rows. Use `AS` is used to rename columns*
+### *`COUNT`the number of rows. Use `AS` is used to rename columns*
 ```sql
 SELECT COUNT(*) as total
 FROM productlines;
@@ -136,14 +136,14 @@ FROM productlines;
 ![alt text](images/totals.png)
 
 
-*`UPDATE` rows in tables and include `WHERE` clause to specify the condition.*
+### *`UPDATE` rows in tables and include `WHERE` clause to specify the condition.*
 
 ```sql
 UPDATE employees
 SET jobTitle = 'Senior Sales Rep'
 WHERE firstName = 'Leslie' AND lastName = 'Thompson';
 ```
-*Run `SELECT` * to fetch all columns fromt the students tables. Use `FROM` to choose the table and `WHERE` to filter rows based on a condition.*
+### *Run `SELECT` * to fetch all columns fromt the students tables. Use `FROM` to choose the table and `WHERE` to filter rows based on a condition.*
 
 ```sql
 SELECT * 
@@ -159,7 +159,7 @@ WHERE country = 'USA' AND creditLimit > 50000;
 ```
 ![alt text](images/select.png)
 
-*Use `ORDER BY` to sort results by one or more columns*
+### *Use `ORDER BY` to sort results by one or more columns*
 ```sql
 SELECT productName, buyPrice, quantityInStock
 FROM products
@@ -167,7 +167,7 @@ ORDER BY buyPrice DESC;
 ```
 ![alt text](images/orderby.png)
 
-*Use `GROUP BY` to aggregate rows that share a common value
+### *Use `GROUP BY` to aggregate rows that share a common value*
 
 ```sql
 SELECT country, COUNT(customerNumber) AS num_customers
