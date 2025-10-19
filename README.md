@@ -18,7 +18,8 @@
 ├── README.md
 ├── data
 │   └── classicmodels.db
-└── scripts
+├── images
+├── scripts
     └── advanced_queries.sql
     └── basic_queries.sql
     └── create_table.sql

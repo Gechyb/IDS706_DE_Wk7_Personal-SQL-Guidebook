@@ -83,7 +83,7 @@ FROM customer_orders
 ORDER BY totalOrders DESC
 LIMIT 10;
 
--- recusive cte (advanced)
+-- recursive cte (advanced)
 WITH RECURSIVE employee_hierarchy AS (
     SELECT employeeNumber, firstName, lastName, reportsTo AS manager
     FROM employees
@@ -97,5 +97,6 @@ WITH RECURSIVE employee_hierarchy AS (
         ON e.reportsTo = eh.employeeNumber
 )
 SELECT * 
-FROM employee_hierarchy;
+FROM employee_hierarchy
+LIMIT 10;
 
