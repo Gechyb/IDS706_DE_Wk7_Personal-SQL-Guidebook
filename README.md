@@ -19,8 +19,10 @@
 ├── data
 │   └── classicmodels.db
 └── scripts
+    └── advanced_queries.sql
     └── basic_queries.sql
     └── create_table.sql
+    └── join_queries.sql
     
 ```
 
@@ -126,7 +128,7 @@ This is the list of tables found in student record database.
 ```
 ![alt text](images/scheme.png)
 
-## Running basic queries
+## Basic queries
 
 ### *`COUNT`the number of rows. Use `AS` is used to rename columns*
 ```sql
@@ -149,6 +151,14 @@ UPDATE employees
 SET jobTitle = 'Senior Sales Rep'
 WHERE firstName = 'Leslie' AND lastName = 'Thompson';
 ```
+
+### *`DELETE` to remove specific records, must include a `WHERE` clause. This often involves using a unique identifier like the primary key.*
+
+```sql
+DELETE FROM orderdetails
+WHERE orderNumber = 10112;
+```
+
 ### *Run `SELECT` * to fetch all columns fromt the students tables. Use `FROM` to choose the table and `WHERE` to filter rows based on a condition.*
 
 ```sql
@@ -246,7 +256,7 @@ ORDER BY avg_payment DESC;
 
 ![alt text](images/aggregate_functions.png)
 
-## Running advanced queries
+## Combining Multiple tables with Joins
 
 `JOIN`s are one of the most important SQL concepts for combining tables.
 

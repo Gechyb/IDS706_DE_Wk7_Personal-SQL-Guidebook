@@ -27,6 +27,10 @@ UPDATE employees
 SET jobTitle = 'Senior Sales Rep'
 WHERE firstName = 'Leslie' AND lastName = 'Thompson';
 
+-- delete specific row
+DELETE FROM orderdetails
+WHERE orderNumber = 10112;
+
 -- Retrieve specific columns from a table and filter based on condition
 SELECT * 
 FROM employees
@@ -83,3 +87,4 @@ SELECT customerNumber, AVG(amount) AS avg_payment
 FROM payments
 GROUP BY customerNumber
 ORDER BY avg_payment DESC;
+
