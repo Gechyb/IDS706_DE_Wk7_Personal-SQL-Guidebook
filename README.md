@@ -247,3 +247,83 @@ ORDER BY avg_payment DESC;
 ![alt text](images/aggregate_functions.png)
 
 ## Running advanced queries
+
+`JOIN`s are one of the most important SQL concepts for combining tables.
+
+### *`INNER JOIN` returns rows when there is a match in both tables*
+### U
+```sql
+SELECT c.customerName, e.firstName, e.lastName
+FROM customers c
+INNER JOIN employees e
+    ON c.salesRepEmployeeNumber = e.employeeNumber;
+```
+![alt text](images/innerjoin.png)
+
+- Get all customer names with their sales rep's full name
+- Only customers who have a sales rep will appear 
+- If salesRepEmployeeNumber is NULL, they won’t show.
+
+### *`LEFT JOIN` returns all rows from the left table with corresponding rows from the right table, even if there's no match in the right table. `NULL`s are returned as values for the 2nd table* 
+
+```sql
+SELECT c.customerName, e.firstName, e.lastName
+FROM customers c
+LEFT JOIN employees e
+    ON c.salesRepEmployeeNumber = e.employeeNumber;
+```
+![alt text](images/leftjoin.png)
+
+- List all customers and their sales reps (include customers with no assigned rep)
+- Customers without a sales rep will still show, but the employee columns will be NULL.
+
+### *SQLite does not support `RIGHT JOIN` directly. But you can simulate it by flipping the tables in a `LEFT JOIN`.
+
+```sql
+SELECT c.customerName, e.firstName, e.lastName
+FROM employees e
+LEFT JOIN customers c
+    ON c.salesRepEmployeeNumber = e.employeeNumber;
+```
+![alt text](images/rightjoin.png)
+
+- Simulate RIGHT JOIN for customers and employees by reversing the order of the tables
+- This ensures you get all employees, even if they don’t manage any customers.
+
+### *`FULL OUTER JOIN` returns all rows from both tables - if there's is not matching row in the second table, `NULL`s are returned.
+
+```sql
+SELECT c.customerName, e.firstName, e.lastName
+FROM customers c
+FULL OUTER JOIN employees e
+    ON c.salesRepEmployeeNumber = e.employeeNumber;
+```
+- Combine customers with reps + reps without customers
+
+### *`CROSS JOIN` should be used carefully. It is a form of cartesian product where every row from table A is combined with every row from table B.*
+
+```sql
+SELECT c.customerName, o.city
+FROM customers c
+CROSS JOIN offices o;
+```
+![alt text](images/cross.png)
+
+- Pair all customers with all offices (demo only).
+- If you have 20 customers and 7 offices → result = 140 rows.
+
+### *`JOIN` with multiple tables. You can chain joins to connect 3+ tables*
+
+```sql
+SELECT o.orderNumber, c.customerName, e.firstName || ' ' || e.lastName AS salesRep
+FROM orders o
+INNER JOIN customers c ON o.customerNumber = c.customerNumber
+INNER JOIN employees e ON c.salesRepEmployeeNumber = e.employeeNumber;
+
+```
+
+![alt text](images/multiplejoin.png)
+
+- List order numbers, customer names, and sales rep names.
+- With these joins, you’ll be able to handle multi-table queries in ClassicModels easily.
+
