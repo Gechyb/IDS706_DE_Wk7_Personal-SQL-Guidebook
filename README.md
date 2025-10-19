@@ -130,11 +130,17 @@ This is the list of tables found in student record database.
 
 ### *`COUNT`the number of rows. Use `AS` is used to rename columns*
 ```sql
-SELECT COUNT(*) as total
+SELECT COUNT(*) AS total
 FROM productlines;
 ```
 ![alt text](images/totals.png)
 
+### *Find the unique rows in a column using `DISTINCT`*
+```sql
+SELECT COUNT(DISTINCT country) AS unique_countries
+FROM customers;
+```
+![alt text](images/unique.png)
 
 ### *`UPDATE` rows in tables and include `WHERE` clause to specify the condition.*
 
@@ -175,3 +181,69 @@ FROM customers
 GROUP BY country;
 ```
 ![alt text](images/groupby.png)
+
+### *Restrict the number of rows returned using `LIMIT`*
+
+```sql
+SELECT customerName, country, creditLimit
+FROM customers
+LIMIT 10;
+```
+![alt text](images/limit.png)
+
+### *Filter results after aggregation (works like WHERE but on grouped data) using `HAVING`*
+```sql
+SELECT country, COUNT(customerNumber) AS num_customers
+FROM customers
+GROUP BY country
+HAVING num_customers > 2;
+```
+![alt text](images/having.png)
+
+
+### *Calculate the average value of a numeric column*
+```sql
+SELECT AVG(creditLimit) AS avg_credit_limit
+FROM customers;
+```
+![alt text](images/avg.png)
+
+### *Get the higest or lowest value using `MAX` or `MIN`*
+```sql
+SELECT MAX(amount) AS max_payment
+FROM payments;
+```
+![alt text](images/max.png)
+
+```sql
+SELECT MIN(quantityInStock) AS min_stock
+FROM products;
+```
+![alt text](images/min.png)
+
+### *Using `SUM` add numeric values across rows*
+```sql
+SELECT SUM(amount) AS total_payments
+FROM payments;
+```
+![alt text](images/sum.png)
+
+
+### *Aggregate functions are most powerful with `GROUP BY`*
+```sql
+-- Number of customers per country
+SELECT country, COUNT(customerNumber) AS num_customers
+FROM customers
+GROUP BY country
+ORDER BY num_customers DESC;
+
+-- Average payment per customer
+SELECT customerNumber, AVG(amount) AS avg_payment
+FROM payments
+GROUP BY customerNumber
+ORDER BY avg_payment DESC;
+```
+
+![alt text](images/aggregate_functions.png)
+
+## Running advanced queries
