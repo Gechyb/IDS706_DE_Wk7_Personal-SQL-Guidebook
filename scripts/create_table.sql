@@ -2,7 +2,8 @@
   Name: Student Record Database for practicing SQL queries
 */
 
-/* Create the database in terminal: sqlite3 student_records.db */
+/* Create the database in terminal: */
+-- sqlite3 student_records.db
 
 /* Drop tables if they already exist */
 DROP TABLE IF EXISTS grades;
@@ -142,3 +143,10 @@ INSERT INTO grades (enrollment_id, grade) VALUES
 (9, 'A-'), (10, 'B'), (11, 'B+'), (12, 'A'),
 (13, 'A-'), (14, 'B+'), (15, 'A'), (16, 'B'),
 (17, 'A'), (18, 'A-'), (19, 'B+'), (20, 'A');
+
+-- Update a row and verify using SELECT
+UPDATE students
+SET major = 'Mathematics'
+WHERE first_name = 'Alan' AND last_name = 'Turing';
+
+SELECT * FROM students WHERE last_name = 'Turing';
